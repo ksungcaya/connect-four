@@ -1,0 +1,12 @@
+{
+    "presets": [
+        "env"
+    ],
+    "comments": false,
+    "env": {
+        "test": {}
+    },
+    "plugins": [
+        "syntax-dynamic-import"
+    ]
+}

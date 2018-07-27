@@ -1,0 +1,10 @@
+{
+    "extends": "airbnb-base",
+    "rules": {
+        "newline-before-return": ["error"],
+        "no-underscore-dangle": 0,
+        "class-methods-use-this": 0,
+        "linebreak-style": 0,
+        "validateLineBreaks": 0
+    }
+}
