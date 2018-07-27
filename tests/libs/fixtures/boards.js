@@ -74,6 +74,31 @@ p1RightDiagonalWinner.drop(player2, 5);
 
 p1RightDiagonalWinner.drop(player1, 5);
 
+const p2LeftDiagonalWinner = new Board();
+
+// Output:
+// 0 0 2 0 0 0 0
+// 0 0 1 2 1 0 0
+// 0 2 1 1 2 0 0
+// 0 1 2 2 1 2 1
+p2LeftDiagonalWinner.drop(player1, 2);
+p2LeftDiagonalWinner.drop(player2, 3);
+p2LeftDiagonalWinner.drop(player1, 5);
+p2LeftDiagonalWinner.drop(player2, 4);
+p2LeftDiagonalWinner.drop(player1, 7);
+p2LeftDiagonalWinner.drop(player2, 6);
+
+p2LeftDiagonalWinner.drop(player1, 3);
+p2LeftDiagonalWinner.drop(player2, 5);
+p2LeftDiagonalWinner.drop(player1, 4);
+p2LeftDiagonalWinner.drop(player2, 2);
+
+p2LeftDiagonalWinner.drop(player1, 3);
+p2LeftDiagonalWinner.drop(player2, 4);
+p2LeftDiagonalWinner.drop(player1, 5);
+
+p2LeftDiagonalWinner.drop(player2, 3);
+
 export {
   player1,
   player2,
@@ -81,6 +106,7 @@ export {
   noVerticalWinner,
   p2HorizontalWinner,
   p1RightDiagonalWinner,
+  p2LeftDiagonalWinner,
 };
 
 export default {};

@@ -1,10 +1,15 @@
 class WinnerValidator {
+  /**
+   * WinnerValidator constructor.
+   *
+   * @param {Board} board
+   */
   constructor(board) {
     this.board = board;
   }
 
   /**
-   * Going from topMost to lowest or vice-versa with the same player.
+   * Going from top-most to lowest or vice-versa with the same player.
    *
    * @param {Object<Player>} player
    *
@@ -12,68 +17,32 @@ class WinnerValidator {
    */
   vertically(player) {
     const { row, column } = this.board.getLastCell();
+    const startCell = this._getStartCell(player, { row, column }, { row: -1, column: 0 });
 
-    let currentRow = row;
-    let currentPlayer;
-    let matches = 0;
-    let lowest = false;
-
-    // going low
-    while (!lowest) {
-      currentRow -= 1;
-      currentPlayer = this.board.cellPlayer(column, currentRow);
-
-      if (!currentPlayer || player !== currentPlayer) {
-        lowest = true;
-      }
-    }
-
-    // going up
-    currentRow += 1;
-    currentPlayer = this.board.cellPlayer(column, currentRow);
-
-    while (currentPlayer && player === currentPlayer) {
-      matches += 1;
-      currentRow += 1;
-
-      currentPlayer = this.board.cellPlayer(column, currentRow);
-    }
-
-    return matches === 4;
+    return this._winnerPattern(player, startCell, { row: 1, column: 0 });
   }
 
+  /**
+   * Going from left-most to the right-most or vice-versa with the same player.
+   *
+   * @param {Object<Player>} player
+   *
+   * @returns {Boolean}
+   */
   horizontally(player) {
     const { row, column } = this.board.getLastCell();
+    const startCell = this._getStartCell(player, { row, column }, { row: 0, column: -1 });
 
-    let currentColumn = column;
-    let currentPlayer;
-    let matches = 0;
-    let leftMost = false;
-
-    // going left
-    while (!leftMost) {
-      currentColumn -= 1;
-      currentPlayer = this.board.cellPlayer(currentColumn, row);
-
-      if (!currentPlayer || player !== currentPlayer) {
-        leftMost = true;
-      }
-    }
-
-    // going right
-    currentColumn += 1;
-    currentPlayer = this.board.cellPlayer(currentColumn, row);
-
-    while (currentPlayer && player === currentPlayer) {
-      matches += 1;
-      currentColumn += 1;
-
-      currentPlayer = this.board.cellPlayer(currentColumn, row);
-    }
-
-    return matches === 4;
+    return this._winnerPattern(player, startCell, { row: 0, column: 1 });
   }
 
+  /**
+   * Determine winning pattern diagonally, right or left.
+   *
+   * @param {Object<Player>} player
+   *
+   * @returns {Boolean}
+   */
   diagonally(player) {
     if (this._diagonallyRight(player)) {
       return true;
@@ -82,43 +51,103 @@ class WinnerValidator {
     return this._diagonallyLeft(player);
   }
 
+  /**
+   * Going from top right-most to the lowest left-most or vice-versa with the same player.
+   *
+   * @param {Object<Player>} player
+   *
+   * @returns {Boolean}
+   */
   _diagonallyRight(player) {
     const { row, column } = this.board.getLastCell();
+    // this will tread to the right most part of the diagonal
+    const startCell = this._getStartCell(player, { row, column }, { row: 1, column: 1 });
 
-    let currentColumn = column;
-    let currentRow = row;
+    return this._winnerPattern(player, startCell, { row: -1, column: -1 });
+  }
+
+  /**
+   * Going from top left-most to the lowest right-most or vice-versa with the same player.
+   *
+   * @param {Object<Player>} player
+   *
+   * @returns {Boolean}
+   */
+  _diagonallyLeft(player) {
+    const { row, column } = this.board.getLastCell();
+    // this will tread to the left most part of the diagonal
+    const startCell = this._getStartCell(player, { row, column }, { row: 1, column: -1 });
+
+    return this._winnerPattern(player, startCell, { row: -1, column: 1 });
+  }
+
+  /**
+   * Determine the cell where we can start looking for the given player's
+   * winning pattern by criteria. The criteria determines how we want to
+   * tread through the pattern (e.g. {column: -1, row : 0})
+   * when looking for the start of horizontal pattern.
+   *
+   * @param {Player} player
+   * @param {Object} currentCell
+   * @param {Object} criteria
+   *
+   * @returns {Object}
+   */
+  _getStartCell(player, currentCell, criteria) {
+    let currentRow = currentCell.row;
+    let currentColumn = currentCell.column;
+
     let currentPlayer;
-    let matches = 0;
-    let rightMost = false;
 
-    // treading to top right most
-    while (!rightMost) {
-      currentRow += 1;
-      currentColumn += 1;
+    for (;;) {
+      currentPlayer = this.board.cellPlayer(
+        currentColumn + (criteria.column),
+        currentRow + (criteria.row),
+      );
+
+      if (!currentPlayer || player !== currentPlayer) {
+        break;
+      }
+
+      currentRow += criteria.row;
+      currentColumn += criteria.column;
+    }
+
+    return {
+      row: currentRow,
+      column: currentColumn,
+    };
+  }
+
+  /**
+   * After finding the cell where we can start looking for the winning
+   * pattern, it's time to walk through it depending the criteria.
+   *
+   * @param {Player} player
+   * @param {Object} startCell
+   * @param {Object} criteria
+   *
+   * @returns {Boolean}
+   */
+  _winnerPattern(player, startCell, criteria) {
+    let matches = 0;
+    let currentPlayer;
+    let currentRow = startCell.row;
+    let currentColumn = startCell.column;
+
+    for (;;) {
       currentPlayer = this.board.cellPlayer(currentColumn, currentRow);
 
       if (!currentPlayer || player !== currentPlayer) {
-        rightMost = true;
+        break;
       }
-    }
 
-    currentRow -= 1;
-    currentColumn -= 1;
-    currentPlayer = this.board.cellPlayer(currentColumn, currentRow);
-
-    while (currentPlayer && player === currentPlayer) {
       matches += 1;
-      currentColumn -= 1;
-      currentRow -= 1;
-
-      currentPlayer = this.board.cellPlayer(currentColumn, currentRow);
+      currentRow += criteria.row;
+      currentColumn += criteria.column;
     }
 
     return matches === 4;
-  }
-
-  _diagonallyLeft(player) { // eslint-disable-line
-    return false;
   }
 }
 

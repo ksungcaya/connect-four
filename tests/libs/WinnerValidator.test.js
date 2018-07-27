@@ -10,6 +10,7 @@ import {
   noVerticalWinner,
   p2HorizontalWinner,
   p1RightDiagonalWinner,
+  p2LeftDiagonalWinner,
 } from './fixtures/boards';
 
 describe('WinnerValidatorTest', () => {
@@ -44,6 +45,13 @@ describe('WinnerValidatorTest', () => {
 
       expect(validate.diagonally(player1)).to.be.true;
       expect(validate.diagonally(player2)).to.be.false;
+    });
+
+    it('validates winner diagonally (left)', () => {
+      const validate = new WinnerValidator(p2LeftDiagonalWinner);
+
+      expect(validate.diagonally(player1)).to.be.false;
+      expect(validate.diagonally(player2)).to.be.true;
     });
   });
 });
