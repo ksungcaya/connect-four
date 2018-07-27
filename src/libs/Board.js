@@ -12,6 +12,7 @@ class Board {
     this.rows = rows;
 
     this.cells = {};
+    this.lastCell = null;
     this.cellsCount = this.columns * this.rows;
   }
 
@@ -32,6 +33,7 @@ class Board {
 
     this.cells[key] = player;
     this.cellsCount -= 1;
+    this.lastCell = { row, column, player };
   }
 
   /**
@@ -50,6 +52,15 @@ class Board {
     }
 
     return null;
+  }
+
+  /**
+   * Get the recently occupied cell.
+   *
+   * @returns {Object}
+   */
+  getLastCell() {
+    return this.lastCell;
   }
 
   /**

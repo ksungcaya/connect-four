@@ -41,5 +41,11 @@ describe('BoardTest', () => {
 
       expect(smallBoard.availableCells()).to.be.equals(0);
     });
+
+    it('gets recenlty occupied cell', () => {
+      board.drop(player1, 4);
+
+      expect(board.getLastCell()).to.deep.equal({ row: 1, column: 4, player: player1 });
+    });
   });
 });
