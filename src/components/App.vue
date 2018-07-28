@@ -1,26 +1,26 @@
 <template>
   <div id="app">
-    <div class="container">
-      <div class="row col-md-6 offset-md-3">
-        <h1>HELLO WORLD</h1>
-      </div>
-    </div>
+      <board></board>
   </div>
 </template>
 
 
 <script>
-// import CreateTodo from "./CreateTodo.vue";
-// import ListTodo from "./ListTodo.vue";
+import Board from "./Board.vue";
 
 export default {
   name: "app",
   data() {
-    return {};
+    return {
+      moves: []
+    };
   },
-  components: {}
+  components: { Board }
 };
 </script>
 
 <style>
+#app {
+  text-align: center;
+}
 </style>
