@@ -1,36 +1,43 @@
 {
-    "name": "four",
-    "version": "0.0.1",
-    "description": "Connect four game.",
-    "main": "app.js",
-    "scripts": {
-        "serve": "node ./dist",
-        "watch": "npx babel ./src -d ./dist -w --copy-files",
-        "lint": "eslint src/",
-        "build": "rimraf ./dist && npx babel ./src -d ./dist --copy-files",
-        "test-all": "npm run test -- --recursive tests/",
-        "test": "npm run lint && npx mocha --opts ./tests/mocha.opts"
-    },
-    "keywords": [
-        "connect four"
-    ],
-    "author": "Kenneth Sungcaya",
-    "license": "MIT",
-    "devDependencies": {
-        "babel-cli": "^6.26.0",
-        "babel-plugin-syntax-dynamic-import": "^6.18.0",
-        "babel-polyfill": "^6.26.0",
-        "babel-preset-env": "^1.7.0",
-        "eslint": "^4.19.1",
-        "eslint-config-airbnb-base": "^13.0.0",
-        "eslint-plugin-import": "^2.13.0",
-        "mocha": "^5.2.0",
-        "rimraf": "^2.6.2",
-        "sinon": "^6.1.4",
-        "sinon-chai": "^3.2.0"
-    },
-    "dependencies": {
-        "chai": "^4.1.2",
-        "lodash": "^4.17.10"
-    }
+  "name": "four",
+  "version": "0.0.1",
+  "description": "Connect four game.",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon ./dist",
+    "serve": "node ./dist",
+    "watch": "npx babel ./src -d ./dist -w --copy-files",
+    "lint": "eslint src/",
+    "build": "rimraf ./dist && npx babel ./src -d ./dist --copy-files",
+    "test-all": "npm run test -- --recursive tests/",
+    "test": "npm run lint && npx mocha --opts ./tests/mocha.opts"
+  },
+  "keywords": [
+    "connect four"
+  ],
+  "author": "Kenneth Sungcaya",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^13.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.18.3",
+    "rimraf": "^2.6.2",
+    "sinon": "^6.1.4",
+    "sinon-chai": "^3.2.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "chai": "^4.1.2",
+    "errorhandler": "^1.5.0",
+    "express": "^4.16.3",
+    "lodash": "^4.17.10",
+    "morgan": "^1.9.0",
+    "winston": "^3.0.0"
+  }
 }
