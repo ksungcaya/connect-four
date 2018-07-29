@@ -74,8 +74,20 @@ io.on('connection', (socket) => {
       socket.broadcast.to(game).emit('otherPlayerReady', player);
     });
 
-    socket.on('all-ready', () => {
-      console.log('lets start the game!');
+    socket.on('all-ready', (players) => {
+      console.log('lets start the game!', game, players);
+
+      socket.broadcast.to(game).emit('playerTurn', players[0], 0);
+
+      socket.on('turn-over', (col, player, lastIndex) => {
+        let newIndex = lastIndex + 1;
+
+        if (players[newIndex] === undefined) {
+          newIndex = 0;
+        }
+
+        socket.broadcast.to(game).emit('playerTurn', players[newIndex], newIndex, player, col);
+      });
     });
   });
 });

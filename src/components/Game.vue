@@ -1,6 +1,11 @@
 <template>
   <div>
-    <board></board>
+    <board
+      :game="game"
+      :players="players"
+      :currentPlayer="currentPlayer">
+    </board>
+
     <div class="players">
       <h3>Players</h3>
       <player 
@@ -25,12 +30,17 @@
 import Board from "./Board.vue";
 import Player from "./Player.vue";
 import Ready from "./Ready.vue";
+import Game from "../libs/Game";
+import GameBoard from "../libs/Board";
 import GamePlayer from "../libs/Player";
 
 export default {
   data() {
     return {
-      game: "",
+      game: null,
+      gameName: "",
+      cols: 7,
+      rows: 6,
       readyCount: 0,
       unassignedPlayers: [],
       colors: ["red", "yellow"],
@@ -40,11 +50,8 @@ export default {
 
   watch: {
     readyCount(newCount) {
-      console.log("ready count: ", newCount);
-
       if (newCount === this.players.length) {
-        console.log("all players ready");
-        this.$socket.emit("all-ready");
+        this.$socket.emit("all-ready", this.players);
       }
     }
   },
@@ -59,7 +66,8 @@ export default {
   },
 
   created() {
-    this.game = this.$route.params.game;
+    this.game = new Game(new GameBoard(this.cols, this.rows));
+    this.gameName = this.$route.params.game;
 
     for (let i = 0; i < this.colors.length; i++) {
       this.unassignedPlayers[i] = new GamePlayer(i, this.colors[i]);
@@ -68,7 +76,7 @@ export default {
 
   sockets: {
     connect() {
-      this.$socket.emit("join-game", this.game);
+      this.$socket.emit("join-game", this.gameName);
     }
   },
 

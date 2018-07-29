@@ -19,21 +19,15 @@
 </template>
 
 <script>
-import Cell from "./Cell.vue";
 import Game from "../libs/Game";
 import Board from "../libs/Board";
 import Player from "../libs/Player";
 
 export default {
-  props: {},
+  props: ["game", "currentPlayer", "players"],
 
   data() {
     return {
-      cols: 7,
-      rows: 6,
-      game: null,
-      players: [],
-      currentPlayer: null,
       currentPlayerIndex: null
     };
   },
@@ -75,38 +69,48 @@ export default {
     }
   },
 
-  created() {
-    this.currentPlayerIndex = 0;
-    this.game = new Game(new Board(this.cols, this.rows));
-    this.cells = this.game.board.cells;
-    this.players = [new Player("red", "red"), new Player("yellow", "yellow")];
-    this.currentPlayer = this.players[this.currentPlayerIndex].setTurn(true);
+  created() {},
+
+  sockets: {
+    playerTurn(player, lastIndex, lastPlayer, lastCol) {
+      if (this.currentPlayer.getId() === player._id) {
+        console.log("turn index: ", lastIndex, player, this.currentPlayer);
+
+        if (lastPlayer) {
+          this.updateBoard(this.players[lastPlayer._id], lastCol);
+        }
+
+        this.currentPlayer.setTurn(true);
+        this.currentPlayerIndex = lastIndex;
+      }
+    }
   },
 
   methods: {
     drop(e) {
-      const col = e.target.getAttribute("data-col");
-
-      this.game.move(this.currentPlayer, col);
-
-      this.$forceUpdate();
-
-      let newIndex = this.currentPlayerIndex + 1;
-
-      if (this.players[newIndex] === undefined) {
-        newIndex = 0;
+      if (!this.currentPlayer || !this.currentPlayer.isTurn()) {
+        return;
       }
 
-      this.currentPlayer.setTurn(false);
+      const col = e.target.getAttribute("data-col");
 
-      this.currentPlayerIndex = newIndex;
-      this.currentPlayer = this.players[newIndex].setTurn(true);
+      this.updateBoard(this.currentPlayer, col);
+
+      this.$socket.emit(
+        "turn-over",
+        col,
+        this.currentPlayer.setTurn(false),
+        this.currentPlayerIndex
+      );
+    },
+
+    updateBoard(player, col) {
+      this.game.move(player, col);
+      this.$forceUpdate();
     }
   },
 
-  components: {
-    Cell
-  }
+  components: {}
 };
 </script>
 
