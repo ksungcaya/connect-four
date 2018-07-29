@@ -33,7 +33,7 @@ export default {
 
   methods: {
     choose() {
-      if (this.playerData.isTaken()) {
+      if (this.currentPlayer || this.playerData.isTaken()) {
         return;
       }
 

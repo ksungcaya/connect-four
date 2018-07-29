@@ -1,7 +1,7 @@
 <template>
   <div class="board">
     <div
-        v-for="(state) in states"
+        v-for="state in states"
         class="board__row"
         :data-row="state.row"
         :key="`row-${state.row}`">
@@ -19,12 +19,8 @@
 </template>
 
 <script>
-import Game from "../libs/Game";
-import Board from "../libs/Board";
-import Player from "../libs/Player";
-
 export default {
-  props: ["game", "currentPlayer", "players"],
+  props: ["game", "currentPlayer", "players", "rows", "cols"],
 
   data() {
     return {

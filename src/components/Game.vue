@@ -3,6 +3,8 @@
     <board
       :game="game"
       :players="players"
+      :cols="cols"
+      :rows="rows"
       :currentPlayer="currentPlayer">
     </board>
 
@@ -38,7 +40,6 @@ export default {
   data() {
     return {
       game: null,
-      gameName: "",
       cols: 7,
       rows: 6,
       readyCount: 0,
@@ -67,7 +68,6 @@ export default {
 
   created() {
     this.game = new Game(new GameBoard(this.cols, this.rows));
-    this.gameName = this.$route.params.game;
 
     for (let i = 0; i < this.colors.length; i++) {
       this.unassignedPlayers[i] = new GamePlayer(i, this.colors[i]);
@@ -76,7 +76,7 @@ export default {
 
   sockets: {
     connect() {
-      this.$socket.emit("join-game", this.gameName);
+      this.$socket.emit("join-game", this.$route.params.game);
     }
   },
 

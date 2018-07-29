@@ -7,6 +7,6 @@ router.get('/', (req, res) => {
   res.sendfile(`${__dirname}/../public/index.html`);
 });
 
-router.use('/games', games);
+router.use('/api/games', games);
 
 export default router;

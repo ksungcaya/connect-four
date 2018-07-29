@@ -20,7 +20,7 @@ export default {
 
   methods: {
     createGame() {
-      this.$http.post("/games", { name: this.name })
+      this.$http.post("/api/games", { name: this.name })
         .catch(error => {
           console.log(error);
         })

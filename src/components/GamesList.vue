@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     fetch() {
-      this.$http.get("/games").then(this.refresh);
+      this.$http.get("/api/games").then(this.refresh);
     },
     refresh({ data }) {
       this.games = data;
