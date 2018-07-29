@@ -63,14 +63,19 @@ app.use((err, req, res) => {
 });
 
 io.on('connection', (socket) => {
-  console.log('socket connected.');
   socket.on('join-game', (game) => {
-    console.log('joining game ' + game); // eslint-disable-line
     socket.join(game);
 
     socket.on('player-assign', (player) => {
-      console.log(player, game);
       socket.broadcast.to(game).emit('playerAssigned', player);
+    });
+
+    socket.on('player-ready', (player) => {
+      socket.broadcast.to(game).emit('otherPlayerReady', player);
+    });
+
+    socket.on('all-ready', () => {
+      console.log('lets start the game!');
     });
   });
 });

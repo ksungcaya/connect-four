@@ -9,16 +9,19 @@
 <script>
 export default {
   props: ["player", "currentPlayer"],
+
   data() {
     return {
       playerData: this.player
     };
   },
+
   computed: {
     chosenClass() {
       return this.playerData.isTaken() ? "player--chosen" : "";
-    },
+    }
   },
+
   sockets: {
     playerAssigned(player) {
       if (player._id === this.playerData.getId()) {
@@ -27,6 +30,7 @@ export default {
       }
     }
   },
+
   methods: {
     choose() {
       if (this.playerData.isTaken()) {
