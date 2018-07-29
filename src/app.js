@@ -1,12 +1,16 @@
+import http from 'http';
 import morgan from 'morgan';
-import express from 'express';
 import logger from 'winston';
+import express from 'express';
+import socketio from 'socket.io';
 import bodyParser from 'body-parser';
 import errorhandler from 'errorhandler';
 import routes from './routes';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const app = express();
+const server = http.Server(app);
+const io = socketio(server);
 
 // Normal express config defaults
 app.use(morgan('dev'));
@@ -58,4 +62,9 @@ app.use((err, req, res) => {
   });
 });
 
-export default app;
+io.on('connection', (socket) => {
+  console.log('socket connected.');
+  console.log(socket);
+});
+
+export default server;

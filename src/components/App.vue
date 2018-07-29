@@ -1,26 +1,23 @@
 <template>
   <div id="app">
-      <board></board>
+    <div class="container">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
 
 <script>
-import Board from "./Board.vue";
-
 export default {
   name: "app",
   data() {
-    return {
-      moves: []
-    };
-  },
-  components: { Board }
+    return {};
+  }
 };
 </script>
 
 <style>
-#app {
+.container {
   text-align: center;
 }
 </style>

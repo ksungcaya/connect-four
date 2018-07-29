@@ -1,22 +1,26 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
-import router from 'vue-router';
+import axios from 'axios';
+import io from 'socket.io-client';
+import VueSocketio from 'vue-socket.io-extended';
+import VueAxios from 'vue-axios';
+import router from './router';
 import App from './components/App.vue';
-// import ApiService from '@/common/api.service'
 
 Vue.config.productionTip = false;
+Vue.use(VueSocketio, io('http://localhost:3000'));
+Vue.use(VueAxios, axios);
 
-// ApiService.init()
 
 /* eslint-disable no-new */
 new Vue({
   el: 'app',
   router,
-  components: { App },
-  created: () => {
-    console.log('created');
+  sockets: {
+    connect() {
+      console.log('socket connected');
+    },
   },
+  components: { App },
   methods: {},
   template: '<App/>',
 });
