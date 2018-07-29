@@ -60,7 +60,7 @@ export default {
               const player = this.game.board.cellPlayer(j, i);
 
               if (player) {
-                cell.fillClass = `board__cell--${player.color()}`;
+                cell.fillClass = `color--${player.color()}`;
               }
             }
 

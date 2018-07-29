@@ -3,6 +3,7 @@ class Player {
     this._id = id;
     this._color = color;
     this._turn = Boolean(turn);
+    this._taken = false;
   }
 
   getId() {
@@ -11,6 +12,16 @@ class Player {
 
   color() {
     return this._color;
+  }
+
+  choose() {
+    this._taken = true;
+
+    return this;
+  }
+
+  isTaken() {
+    return this._taken;
   }
 
   setTurn(isTurn) {

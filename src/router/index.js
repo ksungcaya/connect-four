@@ -11,7 +11,7 @@ export default new VueRouter({
     name: 'GamesList',
     component: GamesList,
   }, {
-    path: '/:game',
+    path: '/games/:game',
     name: 'ShowGame',
     component: Game,
   }],

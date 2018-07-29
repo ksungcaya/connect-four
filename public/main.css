@@ -12,10 +12,25 @@
   margin: 5px;
 }
 
-.board__cell--yellow {
+.color--yellow {
   background-color: #fff666;
 }
 
-.board__cell--red {
+.color--red {
   background-color: #ff9999;
+}
+
+.players {
+  vertical-align: top;
+  display: inline-block;
+}
+
+.player__color {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+}
+
+.player--current {
+  text-decoration: line-through;
 }

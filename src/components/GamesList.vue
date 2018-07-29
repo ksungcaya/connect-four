@@ -1,18 +1,43 @@
 <template>
-  <h1>GAMES</h1>
+  <div class="games">
+    <h1>Games</h1>
+
+    <span v-if="games.length === 0">No games yet.</span>
+
+    <ul v-else>
+      <li v-for="game in games" :key="game.id">
+        <router-link :to="`/games/${game.id}`">{{ game.name }}</router-link>
+      </li>
+    </ul>
+
+    <new-game @created="add"></new-game>
+  </div>
 </template>
 
 <script>
+import NewGame from "./NewGame.vue";
+
 export default {
-  name: "games-list",
   created() {
-    this.$http.get('/games').then((response) => {
-      console.log(response);
-    });
+    this.fetch();
   },
   data() {
-    return {};
+    return {
+      games: []
+    };
   },
+  methods: {
+    fetch() {
+      this.$http.get("/games").then(this.refresh);
+    },
+    refresh({ data }) {
+      this.games = data;
+    },
+    add(data) {
+      this.games.push(data);
+    }
+  },
+  components: { NewGame }
 };
 </script>
 
