@@ -1,7 +1,8 @@
 <template>
-  <div @click="choose" class="player" :class="currentPlayerClass">
+  <div @click="choose" class="player" :class="chosenClass">
     <span class="player__color" :class="`color--${playerData.color()}`"></span>
-    <span class="player__name">Player {{ playerData.getId() }}</span>
+    <span class="player__name">Player {{ this.playerData.getId() }}</span>
+    <span v-if="this.player === this.currentPlayer"> (You)</span>
   </div>
 </template>
 
@@ -14,8 +15,16 @@ export default {
     };
   },
   computed: {
-    currentPlayerClass() {
-      return this.playerData === this.currentPlayer ? "player--current" : "";
+    chosenClass() {
+      return this.playerData.isTaken() ? "player--chosen" : "";
+    },
+  },
+  sockets: {
+    playerAssigned(player) {
+      if (player._id === this.playerData.getId()) {
+        console.log("player assigned ", player);
+        this.$emit("playerChosen", this.playerData);
+      }
     }
   },
   methods: {
@@ -24,8 +33,7 @@ export default {
         return;
       }
 
-      console.log(`player ${this.playerData.getId()} chosen`);
-      this.$emit("playerChosen", this.playerData);
+      this.$emit("playerClicked", this.playerData);
       this.$forceUpdate();
     }
   }

@@ -21,8 +21,10 @@
 }
 
 .players {
+  text-align: left;
   vertical-align: top;
   display: inline-block;
+  margin-left: 10px;
 }
 
 .player__color {
@@ -31,6 +33,6 @@
   height: 10px;
 }
 
-.player--current {
+.player--chosen .player__name {
   text-decoration: line-through;
 }

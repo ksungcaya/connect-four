@@ -5,10 +5,11 @@
       <h3>Players</h3>
       <player 
         v-for="player in players"
-        :key="player.getId()"
+        :key="`${player.getId()}-${count}`"
         :player="player"
         :currentPlayer="currentPlayer"
-        @playerChosen="assign"
+        @playerClicked="assign"
+        @playerChosen="chosen"
       ></player>
     </div>
   </div>
@@ -24,26 +25,30 @@ export default {
     return {
       players: {},
       colors: ["red", "yellow"],
+      game: '',
       currentPlayer: null
     };
   },
   created() {
-    console.log(this.$route.params.game);
+    this.game = this.$route.params.game;
 
     for (let i = 0; i < this.colors.length; i++) {
       this.players[i] = new GamePlayer(i, this.colors[i]);
     }
   },
+  sockets: {
+    connect() {
+      this.$socket.emit('join-game', this.game);
+    }
+  },
   methods: {
     assign(player) {
       this.currentPlayer = player.choose();
-
-      console.log(
-        "current player" +
-          this.currentPlayer.getId() +
-          " : " +
-          this.currentPlayer.isTaken()
-      );
+      this.$socket.emit('player-assign', player);
+    },
+    chosen(player) {
+      this.players[player.getId()] = player.choose();
+      this.$forceUpdate();
     }
   },
   components: { Board, Player }

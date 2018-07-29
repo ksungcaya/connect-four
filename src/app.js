@@ -64,7 +64,15 @@ app.use((err, req, res) => {
 
 io.on('connection', (socket) => {
   console.log('socket connected.');
-  console.log(socket);
+  socket.on('join-game', (game) => {
+    console.log('joining game ' + game); // eslint-disable-line
+    socket.join(game);
+
+    socket.on('player-assign', (player) => {
+      console.log(player, game);
+      socket.broadcast.to(game).emit('playerAssigned', player);
+    });
+  });
 });
 
 export default server;
