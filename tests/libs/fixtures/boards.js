@@ -26,7 +26,6 @@ noVerticalWinner.drop(player2, 1);
 
 // horizontal winner
 const p2HorizontalWinner = new Board();
-
 // Below will produce the following:
 // 1 1 2 2 2 2 1
 // 1 1 2 2 2 1 1

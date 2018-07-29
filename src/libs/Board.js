@@ -20,9 +20,10 @@ class Board {
    * Player move on the column.
    *
    * @param {Player} player
-   * @param {Integer} column
+   * @param {Integer} col
    */
-  drop(player, column) {
+  drop(player, col) {
+    const column = parseInt(col, 10);
     const row = this._getFreeRow(column);
 
     if (row === -1) {

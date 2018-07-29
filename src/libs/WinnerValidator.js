@@ -17,9 +17,9 @@ class WinnerValidator {
    */
   vertically(player) {
     const { row, column } = this.board.getLastCell();
-    const startCell = this._getStartCell(player, { row, column }, { row: -1, column: 0 });
+    const startCell = this._getStartCell(player, { row, column }, { row: 1, column: 0 });
 
-    return this._winnerPattern(player, startCell, { row: 1, column: 0 });
+    return this._winnerPattern(player, startCell, { row: -1, column: 0 });
   }
 
   /**
@@ -100,17 +100,17 @@ class WinnerValidator {
     let currentPlayer;
 
     for (;;) {
-      currentPlayer = this.board.cellPlayer(
-        currentColumn + (criteria.column),
-        currentRow + (criteria.row),
-      );
+      const nextColumn = currentColumn + (criteria.column);
+      const nextRow = currentRow + (criteria.row);
 
-      if (!currentPlayer || player !== currentPlayer) {
+      currentPlayer = this.board.cellPlayer(nextColumn, nextRow);
+
+      if (!currentPlayer || player.getId() !== currentPlayer.getId()) {
         break;
       }
 
-      currentRow += criteria.row;
-      currentColumn += criteria.column;
+      currentRow = nextRow;
+      currentColumn = nextColumn;
     }
 
     return {
@@ -135,10 +135,14 @@ class WinnerValidator {
     let currentRow = startCell.row;
     let currentColumn = startCell.column;
 
+    console.log(this.board.getLastCell(), startCell);
+
     for (;;) {
       currentPlayer = this.board.cellPlayer(currentColumn, currentRow);
 
-      if (!currentPlayer || player !== currentPlayer) {
+      console.log(player, currentPlayer);
+
+      if (!currentPlayer || player.getId() !== currentPlayer.getId()) {
         break;
       }
 
@@ -146,6 +150,8 @@ class WinnerValidator {
       currentRow += criteria.row;
       currentColumn += criteria.column;
     }
+
+    console.log('matches', matches);
 
     return matches === 4;
   }
