@@ -70,10 +70,26 @@ export default {
   sockets: {
     connect() {
       this.$socket.emit("join-game", this.getName());
+    },
+    playerDisconnected(player) {
+      this.playersCount--;
+
+      if (this.playersCount === 0) {
+        reutnr;
+      }
+
+      alert(`Player ${player._color} left. Game will be refreshed.`);
+      window.location.reload();
     }
   },
 
   methods: {
+    leavingGame() {
+      if (this.playersCount >= 2 && this.currentPlayer) {
+        this.$socket.emit("player-left", this.currentPlayer);
+      }
+    },
+
     assign(player) {
       this.currentPlayer = this.addPlayer(player);
       this.$socket.emit("player-assign", player);

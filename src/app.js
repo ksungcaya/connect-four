@@ -97,6 +97,10 @@ io.on('connection', (socket) => {
         });
       });
     });
+
+    socket.on('player-left', (player) => {
+      io.in(game).emit('playerDisconnected', player);
+    });
   });
 });
 
