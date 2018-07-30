@@ -69,7 +69,7 @@ export default {
 
   sockets: {
     playerTurn(player, lastIndex, lastPlayer, lastCol) {
-      if (this.currentPlayer.getId() === player._id) {
+      if (this.currentPlayer && this.currentPlayer.getId() === player._id) {
         console.log("turn index: ", lastIndex, player, this.currentPlayer);
 
         if (lastPlayer) {

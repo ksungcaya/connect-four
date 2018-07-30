@@ -14,7 +14,7 @@ export default {
 
   computed: {
     disabled() {
-      return this.isReady === true || this.players.length < 2;
+      return this.isReady === true || this.players.length < 2 || !this.player;
     }
   },
 

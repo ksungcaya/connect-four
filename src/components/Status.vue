@@ -18,16 +18,16 @@ export default {
     changeTurn(player) {
       let text = `Player ${player._id}'s turn.`;
 
-      if (this.currentPlayer.getId() === player._id) {
+      if (this.currentPlayer && this.currentPlayer.isTurn() === player._id) {
         text = "Your turn.";
       }
 
       this.turnStatus = text;
     },
     playerWon(player) {
-      let text = "You lost.";
+      let text = `Player ${player._id} won.`;
 
-      if (this.currentPlayer.getId() === player._id) {
+      if (this.currentPlayer && this.currentPlayer.getId() === player._id) {
         text = "You won.";
       }
 
