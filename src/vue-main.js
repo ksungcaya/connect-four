@@ -10,7 +10,6 @@ Vue.config.productionTip = false;
 Vue.use(VueSocketio, io('http://localhost:3000'));
 Vue.use(VueAxios, axios);
 
-
 /* eslint-disable no-new */
 new Vue({
   el: 'app',

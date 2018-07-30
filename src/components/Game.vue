@@ -11,7 +11,7 @@
       <h3>Players</h3>
       <player 
         v-for="player in unassignedPlayers"
-        :key="`${player.getId()}-${count}`"
+        :key="`${player.getId()}`"
         :player="player"
         :currentPlayer="currentPlayer"
         @playerClicked="assign"
@@ -19,14 +19,13 @@
       ></player>
 
       <ready 
-        :players="players"
+        :playersCount="playersCount"
         :player="currentPlayer"
         @addReadyCount="readyCount++"
       ></ready>
 
       <status
         :currentPlayer="currentPlayer"
-        :playerTurn="playerTurn"
       ></status>
     </div>
   </div>
@@ -46,34 +45,26 @@ export default {
   data() {
     return {
       game: null,
-      cols: null,
-      rows: null,
+      gameData: null,
       readyCount: 0,
-      unassignedPlayers: [],
-      colors: ["red", "yellow"],
+      playersCount: 0,
+      players: {},
+      unassignedPlayers: {},
       currentPlayer: null
     };
   },
 
   watch: {
     readyCount(newCount) {
-      if (newCount === this.players.length) {
+      if (newCount === this.playersCount) {
         this.$socket.emit("all-ready", this.players);
       }
     }
   },
 
-  computed: {
-    players: {
-      cache: false,
-      get() {
-        return this.unassignedPlayers.filter(player => player.isTaken());
-      }
-    }
-  },
-
   created() {
-    this.createNewGame();
+    this.loadGame();
+    window.addEventListener("beforeunload", this.leavingGame, false);
   },
 
   sockets: {
@@ -84,27 +75,35 @@ export default {
 
   methods: {
     assign(player) {
-      this.currentPlayer = player.choose();
+      this.currentPlayer = this.addPlayer(player);
       this.$socket.emit("player-assign", player);
     },
 
     chosen(player) {
-      this.unassignedPlayers[player.getId()] = player.choose();
+      this.addPlayer(player);
       this.$forceUpdate();
     },
 
-    createNewGame() {
+    addPlayer(player) {
+      this.unassignedPlayers[player.getId()] = player.choose();
+      this.players[player.getId()] = player;
+      this.playersCount++;
+
+      return player;
+    },
+
+    loadGame() {
       this.$http.get(`/api/games/${this.getName()}`).then(({ data }) => {
         if (!data) {
           return this.$router.push("/not-found");
         }
 
-        console.log(data);
         this.gameData = data;
         this.game = new Game(new GameBoard(data.cols, data.rows));
 
-        for (let i = 0; i < this.colors.length; i++) {
-          this.unassignedPlayers[i] = new GamePlayer(i, this.colors[i]);
+        for (let i = 0; i < data.players.length; i++) {
+          const { id, color, isTaken } = data.players[i];
+          this.unassignedPlayers[id] = new GamePlayer(id, color, isTaken);
         }
       });
     },

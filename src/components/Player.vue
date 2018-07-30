@@ -1,7 +1,7 @@
 <template>
   <div @click="choose" class="player" :class="chosenClass">
     <span class="player__color" :class="`color--${playerData.color()}`"></span>
-    <span class="player__name">Player {{ this.playerData.getId() }}</span>
+    <span class="player__name">Player {{ this.playerData.color() }}</span>
     <span v-if="this.player === this.currentPlayer"> (You)</span>
   </div>
 </template>

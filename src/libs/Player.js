@@ -1,9 +1,9 @@
 class Player {
-  constructor(id, color, turn = false) {
+  constructor(id, color, taken = false, turn = false) {
     this._id = id;
     this._color = color;
     this._turn = Boolean(turn);
-    this._taken = false;
+    this._taken = Boolean(taken);
   }
 
   getId() {

@@ -70,8 +70,6 @@ export default {
   sockets: {
     playerTurn(player, lastIndex, lastPlayer, lastCol) {
       if (this.currentPlayer && this.currentPlayer.getId() === player._id) {
-        console.log("turn index: ", lastIndex, player, this.currentPlayer);
-
         if (lastPlayer) {
           this.updateBoard(this.players[lastPlayer._id], lastCol);
         }
@@ -113,7 +111,7 @@ export default {
 
     playerWon(player) {
       if (this.game.hasWonBy(player)) {
-        console.log("Player ", player.getId(), " won");
+        console.log("Player ", player.color(), " won");
         this.$socket.emit("player-won", player);
       }
     }

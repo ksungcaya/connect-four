@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  props: ["players", "player"],
+  props: ["playersCount", "player"],
 
   data() {
     return {
@@ -14,7 +14,7 @@ export default {
 
   computed: {
     disabled() {
-      return this.isReady === true || this.players.length < 2 || !this.player;
+      return this.isReady === true || this.playersCount < 2 || !this.player;
     }
   },
 

@@ -74,12 +74,14 @@ io.on('connection', (socket) => {
       socket.broadcast.to(game).emit('otherPlayerReady', player);
     });
 
-    socket.on('all-ready', (players) => {
+    socket.on('all-ready', (readyPlayers) => {
+      const players = Object.values(readyPlayers);
+
       socket.broadcast.to(game).emit('playerTurn', players[0], 0);
       io.in(game).emit('changeTurn', players[0]);
 
-      socket.on('turn-over', (col, player, lastIndex) => {
-        let newIndex = lastIndex + 1;
+      socket.on('turn-over', (col, player, lsatIndex) => {
+        let newIndex = lsatIndex + 1;
 
         if (players[newIndex] === undefined) {
           newIndex = 0;

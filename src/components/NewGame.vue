@@ -16,7 +16,8 @@ export default {
     return {
       name: "",
       cols: 7,
-      rows: 6
+      rows: 6,
+      colors: ["red", "yellow"]
     };
   },
 
@@ -26,7 +27,8 @@ export default {
         .post("/api/games", {
           name: this.name,
           cols: this.cols,
-          rows: this.rows
+          rows: this.rows,
+          colors: this.colors,
         })
         .catch(error => {
           console.log(error);
