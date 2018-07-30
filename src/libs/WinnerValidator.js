@@ -135,12 +135,8 @@ class WinnerValidator {
     let currentRow = startCell.row;
     let currentColumn = startCell.column;
 
-    console.log(this.board.getLastCell(), startCell);
-
     for (;;) {
       currentPlayer = this.board.cellPlayer(currentColumn, currentRow);
-
-      console.log(player, currentPlayer);
 
       if (!currentPlayer || player.getId() !== currentPlayer.getId()) {
         break;
@@ -150,8 +146,6 @@ class WinnerValidator {
       currentRow += criteria.row;
       currentColumn += criteria.column;
     }
-
-    console.log('matches', matches);
 
     return matches === 4;
   }

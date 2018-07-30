@@ -75,9 +75,8 @@ io.on('connection', (socket) => {
     });
 
     socket.on('all-ready', (players) => {
-      console.log('lets start the game!', game, players);
-
       socket.broadcast.to(game).emit('playerTurn', players[0], 0);
+      io.in(game).emit('changeTurn', players[0]);
 
       socket.on('turn-over', (col, player, lastIndex) => {
         let newIndex = lastIndex + 1;
@@ -86,7 +85,14 @@ io.on('connection', (socket) => {
           newIndex = 0;
         }
 
-        socket.broadcast.to(game).emit('playerTurn', players[newIndex], newIndex, player, col);
+        const newPlayer = players[newIndex];
+
+        socket.broadcast.to(game).emit('playerTurn', newPlayer, newIndex, player, col);
+        io.in(game).emit('changeTurn', newPlayer); // update turn status
+
+        socket.on('player-won', (winner) => {
+          io.in(game).emit('playerWon', winner);
+        });
       });
     });
   });

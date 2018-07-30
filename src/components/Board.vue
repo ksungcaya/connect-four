@@ -47,7 +47,7 @@ export default {
             };
 
             if (this.game) {
-              const player = this.game.board.cellPlayer(j, i);
+              const player = this.game.cellPlayer(j, i);
 
               if (player) {
                 cell.fillClass = `color--${player.color()}`;
@@ -84,7 +84,11 @@ export default {
 
   methods: {
     drop(e) {
-      if (!this.currentPlayer || !this.currentPlayer.isTurn()) {
+      if (
+        !this.currentPlayer ||
+        !this.currentPlayer.isTurn() ||
+        this.game.getWinner()
+      ) {
         return;
       }
 
@@ -103,6 +107,15 @@ export default {
     updateBoard(player, col) {
       this.game.move(player, col);
       this.$forceUpdate();
+
+      this.playerWon(player);
+    },
+
+    playerWon(player) {
+      if (this.game.hasWonBy(player)) {
+        console.log("Player ", player.getId(), " won");
+        this.$socket.emit("player-won", player);
+      }
     }
   },
 

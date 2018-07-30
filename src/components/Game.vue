@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div class="game">
     <board
       :game="game"
       :players="players"
       :cols="cols"
       :rows="rows"
-      :currentPlayer="currentPlayer">
-    </board>
+      :currentPlayer="currentPlayer"
+    ></board>
 
     <div class="players">
       <h3>Players</h3>
@@ -24,6 +24,11 @@
         :player="currentPlayer"
         @addReadyCount="readyCount++"
       ></ready>
+
+      <status
+        :currentPlayer="currentPlayer"
+        :playerTurn="playerTurn"
+      ></status>
     </div>
   </div>
 </template>
@@ -32,6 +37,8 @@
 import Board from "./Board.vue";
 import Player from "./Player.vue";
 import Ready from "./Ready.vue";
+import Status from "./Status.vue";
+
 import Game from "../libs/Game";
 import GameBoard from "../libs/Board";
 import GamePlayer from "../libs/Player";
@@ -89,10 +96,10 @@ export default {
     chosen(player) {
       this.unassignedPlayers[player.getId()] = player.choose();
       this.$forceUpdate();
-    }
+    },
   },
 
-  components: { Board, Player, Ready }
+  components: { Board, Player, Ready, Status }
 };
 </script>
 
