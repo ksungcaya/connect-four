@@ -38,3 +38,11 @@ export default {
   created() {}
 };
 </script>
+
+<style>
+.game__status__turn,
+.game__status__winner {
+  font-size: 2em;
+  font-weight: bold;
+}
+</style>

@@ -44,4 +44,13 @@ export default {
 </script>
 
 <style>
+.player__color {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+}
+
+.player--chosen .player__name {
+  text-decoration: line-through;
+}
 </style>

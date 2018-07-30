@@ -48,4 +48,11 @@ export default {
 </script>
 
 <style>
+.games-list {
+  margin-top: 70px;
+}
+
+.game-form {
+  margin-top: 20px;
+}
 </style>

@@ -37,4 +37,7 @@ export default {
 </script>
 
 <style>
+.btn-ready {
+  margin: 20px 0;
+}
 </style>

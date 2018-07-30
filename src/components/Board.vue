@@ -121,5 +121,18 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
+.board {
+  background-color: darkslateblue;
+  display: inline-block;
+}
+
+.board__cell {
+  display: inline-block;
+  background-color: white;
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  margin: 5px;
+}
 </style>

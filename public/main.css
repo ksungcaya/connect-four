@@ -1,59 +1,17 @@
-.games-list {
-  margin-top: 70px;
-}
-
-.game-form {
-  margin-top: 20px;
-}
-
-.game__link:hover {
+a:hover {
   text-decoration: none;
 }
 
-.board {
-  background-color: darkslateblue;
-  display: inline-block;
-}
-
-.board__cell {
-  display: inline-block;
-  background-color: white;
-  border-radius: 50%;
-  width: 70px;
-  height: 70px;
-  margin: 5px;
-}
-
 .color--yellow {
-  background-color: #fff666;
+  background-color: #fff666 !important;
 }
 
 .color--red {
-  background-color: #ff9999;
+  background-color: #ff9999 !important;
 }
 
-.players {
-  text-align: left;
-  vertical-align: top;
-  display: inline-block;
-  margin-left: 10px;
+.back-link {
+  display: block;
+  margin-bottom: 20px;
 }
 
-.player__color {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-}
-
-.player--chosen .player__name {
-  text-decoration: line-through;
-}
-
-.btn-ready {
-  margin: 20px 0;
-}
-
-.game__status__turn {
-  font-size: 2em;
-  font-weight: bold;
-}

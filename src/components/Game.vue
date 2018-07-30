@@ -1,33 +1,43 @@
 <template>
-  <div class="game">
-    <board
-      :game="game"
-      :gameData="gameData"
-      :players="players"
-      :currentPlayer="currentPlayer"
-    ></board>
-
-    <div class="players">
-      <h3>Players</h3>
-      <player 
-        v-for="player in unassignedPlayers"
-        :key="`${player.getId()}`"
-        :player="player"
+  <div class="game row">
+    <div class="col-8 align-self-end">
+      <board
+        :game="game"
+        :gameData="gameData"
+        :players="players"
         :currentPlayer="currentPlayer"
-        @playerClicked="assign"
-        @playerChosen="chosen"
-      ></player>
-
-      <ready 
-        :playersCount="playersCount"
-        :player="currentPlayer"
-        @addReadyCount="readyCount++"
-      ></ready>
+      ></board>
     </div>
 
-    <status
-      :currentPlayer="currentPlayer"
-    ></status>
+    <div class="game-side col-3 align-self-start">
+      <router-link 
+        :to="{ path: '/' }"
+        class="back-link">
+        &laquo; Games
+      </router-link>
+
+      <div class="players">
+        <h3>Players</h3>
+        <player 
+          v-for="player in unassignedPlayers"
+          :key="`${player.getId()}`"
+          :player="player"
+          :currentPlayer="currentPlayer"
+          @playerClicked="assign"
+          @playerChosen="chosen"
+        ></player>
+
+        <ready 
+          :playersCount="playersCount"
+          :player="currentPlayer"
+          @addReadyCount="readyCount++"
+        ></ready>
+      </div>
+
+      <status
+        :currentPlayer="currentPlayer"
+      ></status>
+    </div>
   </div>
 </template>
 
@@ -58,7 +68,8 @@ export default {
     readyCount(newCount) {
       if (newCount === this.playersCount) {
         this.$socket.emit("all-ready", this.players);
-        this.lockGame();
+        console.log("game locked");
+        // this.lockGame();
       }
     }
   },
@@ -69,9 +80,6 @@ export default {
   },
 
   sockets: {
-    connect() {
-      this.$socket.emit("join-game", this.getName());
-    },
     playerDisconnected(player) {
       this.playersCount--;
 
@@ -147,6 +155,8 @@ export default {
           const { id, color, isTaken } = data.players[i];
           this.unassignedPlayers[id] = new GamePlayer(id, color, isTaken);
         }
+
+        this.$socket.emit("join-game", this.getName());
       });
     },
 
@@ -160,4 +170,11 @@ export default {
 </script>
 
 <style>
+.game {
+  margin-top: 70px;
+}
+
+.game-side {
+  text-align: left;
+}
 </style>
