@@ -1,12 +1,14 @@
 <template>
   <div>
-    <div class="form-group">
-      <input type="text" name="name" v-model="name">
+    <div class="input-group game-form">
+      <input type="text" class="form-control" name="name" v-model="name">
+      <div class="input-group-append">
+        <button type="submit"
+                placeholder="Enter game name"
+                class="btn btn-outline-secondary"
+                @click="createGame">Create</button>
+      </div>
     </div>
-
-    <button type="submit"
-            class="btn btn-default"
-            @click="createGame">Create</button>
   </div>
 </template>
 
@@ -28,7 +30,7 @@ export default {
           name: this.name,
           cols: this.cols,
           rows: this.rows,
-          colors: this.colors,
+          colors: this.colors
         })
         .catch(error => {
           console.log(error);

@@ -23,11 +23,11 @@
         :player="currentPlayer"
         @addReadyCount="readyCount++"
       ></ready>
-
-      <status
-        :currentPlayer="currentPlayer"
-      ></status>
     </div>
+
+    <status
+      :currentPlayer="currentPlayer"
+    ></status>
   </div>
 </template>
 

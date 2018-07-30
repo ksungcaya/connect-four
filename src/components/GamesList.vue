@@ -1,14 +1,20 @@
 <template>
-  <div class="games">
+  <div class="games-list">
     <h1>Games</h1>
 
     <span v-if="games.length === 0">No games yet.</span>
 
-    <ul v-else>
-      <li v-for="game in games" :key="game.id">
-        <router-link :to="`/games/${game.id}`">{{ game.name }}</router-link>
-      </li>
-    </ul>
+    <div 
+      class="list-group"
+      v-for="game in games"
+      :key="game.id"
+      v-else>
+        <router-link 
+          :to="`/games/${game.id}`"
+          class="list-group-item list-group-item-action game__link">
+          {{ game.name }}
+        </router-link>
+    </div>
 
     <new-game @created="add"></new-game>
   </div>

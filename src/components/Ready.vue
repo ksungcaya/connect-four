@@ -1,5 +1,5 @@
 <template>
-  <button @click="ready" :disabled="disabled">Ready</button>
+  <button @click="ready" :disabled="disabled" class="btn btn-light btn-ready">Ready</button>
 </template>
 
 <script>
