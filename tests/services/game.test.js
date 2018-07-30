@@ -31,6 +31,7 @@ describe('GamesTest', () => {
     expect(testGame).to.have.property('cols', data.cols);
     expect(testGame).to.have.property('rows', data.rows);
     expect(testGame).to.have.property('locked', false);
+    expect(testGame).to.have.property('ended', false);
     expect(testGame).to.have.property('players');
 
     expect(testGame.players).to.have.lengthOf(2);
@@ -51,6 +52,7 @@ describe('GamesTest', () => {
     expect(gameData).to.have.property('cols', data.cols);
     expect(gameData).to.have.property('rows', data.rows);
     expect(testGame).to.have.property('locked', false);
+    expect(testGame).to.have.property('ended', false);
     expect(gameData).to.have.property('players');
     expect(gameData.players).to.have.lengthOf(2);
   });
@@ -63,5 +65,14 @@ describe('GamesTest', () => {
 
     game.unlock(id);
     expect(game.find(id)).to.have.property('locked', false);
+  });
+
+  it('marks end of the game', () => {
+    const { id } = testGame;
+
+    game.end(id);
+
+    expect(game.find(id)).to.have.property('ended', true);
+    expect(game.get()).to.have.lengthOf(0);
   });
 });

@@ -13,7 +13,7 @@ class Game {
    * Get all available games.
    */
   get() {
-    return this._db.get(GAMES_TABLE).value();
+    return this._db.get(GAMES_TABLE).filter({ ended: false }).value();
   }
 
   /**
@@ -31,6 +31,7 @@ class Game {
       cols,
       rows,
       locked: false,
+      ended: false,
     };
 
     this._db.get(GAMES_TABLE).push(payload).write();
@@ -83,6 +84,17 @@ class Game {
     }
 
     return game;
+  }
+
+  /**
+   * Mark the game as ended.
+   *
+   * @param {String} id
+   *
+   * @returns {Object}
+   */
+  end(id) {
+    return this._db.get(GAMES_TABLE).find({ id }).assign({ ended: true }).write();
   }
 
   /**

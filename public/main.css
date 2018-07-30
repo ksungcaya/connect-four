@@ -15,3 +15,11 @@ a:hover {
   margin-bottom: 20px;
 }
 
+.board__row:hover,
+.player:hover {
+  cursor: pointer;
+}
+
+.player--chosen:hover {
+  cursor: not-allowed;
+}

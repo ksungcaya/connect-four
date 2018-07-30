@@ -36,6 +36,7 @@
 
       <status
         :currentPlayer="currentPlayer"
+        @playerWon="endGame"
       ></status>
     </div>
   </div>
@@ -68,8 +69,7 @@ export default {
     readyCount(newCount) {
       if (newCount === this.playersCount) {
         this.$socket.emit("all-ready", this.players);
-        console.log("game locked");
-        // this.lockGame();
+        this.lockGame();
       }
     }
   },
@@ -138,9 +138,20 @@ export default {
         });
     },
 
+    endGame() {
+      this.$http
+        .post(`/api/games/end`, { id: this.getName() })
+        .catch(error => {
+          console.log(error);
+        })
+        .then(({ data }) => {
+          console.log("game ended.");
+        });
+    },
+
     loadGame() {
       this.$http.get(`/api/games/${this.getName()}`).then(({ data }) => {
-        if (!data) {
+        if (!data || data.ended) {
           return this.$router.push("/not-found");
         }
 

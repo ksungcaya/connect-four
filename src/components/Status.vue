@@ -33,6 +33,7 @@ export default {
 
       this.turnStatus = '';
       this.winnerStatus = text;
+      this.$emit('playerWon', player);
     }
   },
   created() {}

@@ -20,6 +20,10 @@ router.post('/unlock', (req, res) => {
   res.json(game.unlock(req.body.id));
 });
 
+router.post('/end', (req, res) => {
+  res.json(game.end(req.body.id));
+});
+
 router.get('/:id', (req, res) => {
   res.json(game.find(req.params.id));
 });
