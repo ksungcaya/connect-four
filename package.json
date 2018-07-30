@@ -11,7 +11,8 @@
     "postbuild": "webpack",
     "build": "rimraf ./dist && npx babel ./src -d ./dist --copy-files",
     "test-all": "npm run test -- --recursive tests/",
-    "test": "npm run lint && npx mocha --opts ./tests/mocha.opts"
+    "test": "npm run lint && npx mocha --opts ./tests/mocha.opts",
+    "postinstall": "npm run build"
   },
   "keywords": [
     "connect four"
