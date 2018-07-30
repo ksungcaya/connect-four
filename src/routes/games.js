@@ -1,32 +1,19 @@
 import express from 'express';
-import shortid from 'shortid';
-import db from '../db';
+import Game from '../services/game';
 
 const router = express.Router();
+const game = new Game();
 
 router.get('/', (req, res) => {
-  res.json(db.get('games').value());
+  res.json(game.get());
 });
 
 router.post('/', (req, res) => {
-  const data = {
-    id: shortid.generate(),
-    name: req.body.name,
-    cols: req.body.cols,
-    rows: req.body.rows,
-  };
-
-  db.get('games').push(data).write();
-
-  res.json(data);
+  res.json(game.create(req.body));
 });
 
 router.get('/:id', (req, res) => {
-  const data = db.get('games')
-    .find({ id: req.params.id })
-    .value();
-
-  res.json(data);
+  res.json(game.find(req.params.id));
 });
 
 export default router;

@@ -4,6 +4,7 @@ dist
 coverage
 .nyc_output
 db.json
+db.test.json
 
 yarn-error.log
 
