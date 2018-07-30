@@ -14,19 +14,26 @@
 export default {
   data() {
     return {
-      name: ""
+      name: "",
+      cols: 7,
+      rows: 6
     };
   },
 
   methods: {
     createGame() {
-      this.$http.post("/api/games", { name: this.name })
+      this.$http
+        .post("/api/games", {
+          name: this.name,
+          cols: this.cols,
+          rows: this.rows
+        })
         .catch(error => {
           console.log(error);
         })
         .then(({ data }) => {
-          this.name = '';
-          this.$emit('created', data);
+          this.name = "";
+          this.$emit("created", data);
 
           console.log(data);
         });

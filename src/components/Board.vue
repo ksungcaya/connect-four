@@ -1,5 +1,5 @@
 <template>
-  <div class="board">
+  <div class="board" v-if="game && gameData">
     <div
         v-for="state in states"
         class="board__row"
@@ -20,7 +20,7 @@
 
 <script>
 export default {
-  props: ["game", "currentPlayer", "players", "rows", "cols"],
+  props: ["game", "currentPlayer", "players", "gameData"],
 
   data() {
     return {
@@ -34,13 +34,13 @@ export default {
       get() {
         let states = [];
 
-        for (let i = this.rows; i !== 0; i--) {
+        for (let i = this.gameData.rows; i !== 0; i--) {
           let state = {
             row: i,
             cells: []
           };
 
-          for (let j = 1; j <= this.cols; j++) {
+          for (let j = 1; j <= this.gameData.cols; j++) {
             let cell = {
               col: j,
               fillClass: ""

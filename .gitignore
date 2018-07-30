@@ -3,6 +3,7 @@ node_modules/
 dist
 coverage
 .nyc_output
+db.json
 
 yarn-error.log
 

@@ -2,9 +2,8 @@
   <div class="game">
     <board
       :game="game"
+      :gameData="gameData"
       :players="players"
-      :cols="cols"
-      :rows="rows"
       :currentPlayer="currentPlayer"
     ></board>
 
@@ -47,8 +46,8 @@ export default {
   data() {
     return {
       game: null,
-      cols: 7,
-      rows: 6,
+      cols: null,
+      rows: null,
       readyCount: 0,
       unassignedPlayers: [],
       colors: ["red", "yellow"],
@@ -74,16 +73,12 @@ export default {
   },
 
   created() {
-    this.game = new Game(new GameBoard(this.cols, this.rows));
-
-    for (let i = 0; i < this.colors.length; i++) {
-      this.unassignedPlayers[i] = new GamePlayer(i, this.colors[i]);
-    }
+    this.createNewGame();
   },
 
   sockets: {
     connect() {
-      this.$socket.emit("join-game", this.$route.params.game);
+      this.$socket.emit("join-game", this.getName());
     }
   },
 
@@ -97,6 +92,26 @@ export default {
       this.unassignedPlayers[player.getId()] = player.choose();
       this.$forceUpdate();
     },
+
+    createNewGame() {
+      this.$http.get(`/api/games/${this.getName()}`).then(({ data }) => {
+        if (!data) {
+          return this.$router.push("/not-found");
+        }
+
+        console.log(data);
+        this.gameData = data;
+        this.game = new Game(new GameBoard(data.cols, data.rows));
+
+        for (let i = 0; i < this.colors.length; i++) {
+          this.unassignedPlayers[i] = new GamePlayer(i, this.colors[i]);
+        }
+      });
+    },
+
+    getName() {
+      return this.$route.params.game;
+    }
   },
 
   components: { Board, Player, Ready, Status }
