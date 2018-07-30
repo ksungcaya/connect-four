@@ -6,6 +6,7 @@ coverage
 db.json
 db.test.json
 
+yarn.lock
 yarn-error.log
 
 *.DS_STORE
