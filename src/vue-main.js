@@ -6,8 +6,12 @@ import VueAxios from 'vue-axios';
 import router from './router';
 import App from './components/App.vue';
 
+
+const port = (window.location.port ? `:${window.location.port}` : '');
+const baseUrl = `${window.location.protocol}//${window.location.hostname}${port}`;
+
 Vue.config.productionTip = false;
-Vue.use(VueSocketio, io('http://localhost:3000'));
+Vue.use(VueSocketio, io(baseUrl));
 Vue.use(VueAxios, axios);
 
 /* eslint-disable no-new */
