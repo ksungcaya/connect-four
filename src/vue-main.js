@@ -16,7 +16,7 @@ new Vue({
   router,
   sockets: {
     connect() {
-      console.log('socket connected');
+      console.log('socket connected'); // eslint-disable-line
     },
   },
   components: { App },

@@ -12,6 +12,14 @@ router.post('/', (req, res) => {
   res.json(game.create(req.body));
 });
 
+router.post('/lock', (req, res) => {
+  res.json(game.lock(req.body.id));
+});
+
+router.post('/unlock', (req, res) => {
+  res.json(game.unlock(req.body.id));
+});
+
 router.get('/:id', (req, res) => {
   res.json(game.find(req.params.id));
 });

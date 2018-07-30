@@ -58,6 +58,7 @@ export default {
     readyCount(newCount) {
       if (newCount === this.playersCount) {
         this.$socket.emit("all-ready", this.players);
+        this.lockGame();
       }
     }
   },
@@ -75,11 +76,13 @@ export default {
       this.playersCount--;
 
       if (this.playersCount === 0) {
-        reutnr;
+        return;
       }
 
-      alert(`Player ${player._color} left. Game will be refreshed.`);
-      window.location.reload();
+      this.unlockGame().then(() => {
+        alert(`Player ${player._color} left. Game will be refreshed.`);
+        window.location.reload();
+      });
     }
   },
 
@@ -108,10 +111,33 @@ export default {
       return player;
     },
 
+    lockGame() {
+      this.$http
+        .post(`/api/games/lock`, { id: this.getName() })
+        .catch(error => {
+          console.log(error);
+        })
+        .then(({ data }) => {
+          console.log("game locked.");
+        });
+    },
+
+    unlockGame() {
+      return this.$http
+        .post(`/api/games/unlock`, { id: this.getName() })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+
     loadGame() {
       this.$http.get(`/api/games/${this.getName()}`).then(({ data }) => {
         if (!data) {
           return this.$router.push("/not-found");
+        }
+
+        if (data.locked) {
+          return this.$router.push("/game-locked");
         }
 
         this.gameData = data;

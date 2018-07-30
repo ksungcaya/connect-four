@@ -19,6 +19,9 @@ export default new VueRouter({
     path: '/not-found',
     component: NotFound,
   }, {
+    path: '/game-locked',
+    component: NotFound,
+  }, {
     path: '*',
     redirect: '/not-found',
   }],

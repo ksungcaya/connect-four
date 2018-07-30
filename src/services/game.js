@@ -30,6 +30,7 @@ class Game {
       name,
       cols,
       rows,
+      locked: false,
     };
 
     this._db.get(GAMES_TABLE).push(payload).write();
@@ -68,7 +69,7 @@ class Game {
   /**
    * Get game data by id.
    *
-   * @param {Integer} id
+   * @param {String} id
    *
    * @returns {Object}
    */
@@ -82,6 +83,40 @@ class Game {
     }
 
     return game;
+  }
+
+  /**
+   * Mark locked flag to true.
+   *
+   * @param {String} id
+   *
+   * @returns {Object}
+   */
+  lock(id) {
+    return this._toggleLock(id, true);
+  }
+
+  /**
+   * Mark locked flag to false.
+   *
+   * @param {String} id
+   *
+   * @returns {Object}
+   */
+  unlock(id) {
+    return this._toggleLock(id, false);
+  }
+
+  /**
+   * Toggle locked flag.
+   *
+   * @param {String} id
+   * @param {Boolean} locked
+   *
+   * @returns {Object}
+   */
+  _toggleLock(id, locked) {
+    return this._db.get(GAMES_TABLE).find({ id }).assign({ locked }).write();
   }
 }
 
