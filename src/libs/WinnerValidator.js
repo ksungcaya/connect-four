@@ -147,7 +147,7 @@ class WinnerValidator {
       currentColumn += criteria.column;
     }
 
-    return matches === 4;
+    return matches >= 4;
   }
 }
 

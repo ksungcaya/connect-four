@@ -11,6 +11,7 @@ import {
   p2HorizontalWinner,
   p1RightDiagonalWinner,
   p2LeftDiagonalWinner,
+  p1HorizontalRegression,
 } from './fixtures/boards';
 
 describe('WinnerValidatorTest', () => {
@@ -36,6 +37,13 @@ describe('WinnerValidatorTest', () => {
 
       expect(validate.horizontally(player1)).to.be.false;
       expect(validate.horizontally(player2)).to.be.true;
+    });
+
+    it('validates winner horizontally with 5 matches', () => {
+      const validate = new WinnerValidator(p1HorizontalRegression);
+
+      expect(validate.horizontally(player1)).to.be.true;
+      expect(validate.horizontally(player2)).to.be.false;
     });
   });
 

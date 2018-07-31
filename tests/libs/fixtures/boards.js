@@ -98,6 +98,27 @@ p2LeftDiagonalWinner.drop(player1, 5);
 
 p2LeftDiagonalWinner.drop(player2, 3);
 
+// Recreate the scenario where the
+// having 5 matches is not a winner.
+// Output:
+// 0 0 2 2 2 0 2
+// 0 0 1 1 1 1 1
+const p1HorizontalRegression = new Board();
+p1HorizontalRegression.drop(player1, 7);
+p1HorizontalRegression.drop(player2, 7);
+
+p1HorizontalRegression.drop(player1, 3);
+p1HorizontalRegression.drop(player2, 3);
+
+p1HorizontalRegression.drop(player1, 4);
+p1HorizontalRegression.drop(player2, 4);
+
+p1HorizontalRegression.drop(player1, 5);
+p1HorizontalRegression.drop(player2, 5);
+
+p1HorizontalRegression.drop(player1, 6);
+
+
 export {
   player1,
   player2,
@@ -106,6 +127,7 @@ export {
   p2HorizontalWinner,
   p1RightDiagonalWinner,
   p2LeftDiagonalWinner,
+  p1HorizontalRegression,
 };
 
 export default {};
