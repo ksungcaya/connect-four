@@ -31,12 +31,19 @@ export default {
         text = "You won.";
       }
 
-      this.turnStatus = '';
-      this.winnerStatus = text;
-      this.$emit('playerWon', player);
+      this.endGame(text, player);
+    },
+    gameDraw() {
+      this.endGame('Game is a draw.');
     }
   },
-  created() {}
+  methods: {
+    endGame(text, player) {
+      this.turnStatus = '';
+      this.winnerStatus = text;
+      this.$emit('endGame', player);
+    }
+  }
 };
 </script>
 

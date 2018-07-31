@@ -32,6 +32,10 @@ function init(io, socket) {
         socket.on('player-won', (winner) => {
           io.in(game).emit('playerWon', winner);
         });
+
+        socket.on('game-draw', () => {
+          io.in(game).emit('gameDraw');
+        });
       });
     });
 

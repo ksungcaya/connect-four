@@ -36,7 +36,7 @@
 
       <status
         :currentPlayer="currentPlayer"
-        @playerWon="endGame"
+        @endGame="endGame"
       ></status>
     </div>
   </div>

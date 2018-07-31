@@ -106,13 +106,18 @@ export default {
       this.game.move(player, col);
       this.$forceUpdate();
 
-      this.playerWon(player);
+      this.checkWinner(player);
     },
 
-    playerWon(player) {
+    checkWinner(player) {
       if (this.game.hasWonBy(player)) {
         console.log("Player ", player.color(), " won");
-        this.$socket.emit("player-won", player);
+        return this.$socket.emit("player-won", player);
+      }
+
+      if (this.game.isDraw()) {
+        console.log("Game is a draw.");
+        return this.$socket.emit("game-draw");
       }
     }
   },
