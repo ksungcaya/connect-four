@@ -2,46 +2,49 @@
 function init(io, socket) {
   socket.on('join-game', (game) => {
     socket.join(game);
+    socket.broadcast.to(game).emit('joinGame');
+  });
 
-    socket.on('player-assign', (player) => {
-      socket.broadcast.to(game).emit('playerAssigned', player);
-    });
+  socket.on('player-assign', (game, player) => {
+    socket.broadcast.to(game).emit('playerAssigned', player);
+  });
 
-    socket.on('player-ready', (player) => {
-      socket.broadcast.to(game).emit('otherPlayerReady', player);
-    });
+  socket.on('player-ready', (game, player) => {
+    socket.broadcast.to(game).emit('otherPlayerReady', player);
+  });
 
-    socket.on('all-ready', (readyPlayers) => {
-      const players = Object.values(readyPlayers);
+  socket.on('all-ready', (game, readyPlayers) => {
+    const players = Object.values(readyPlayers);
 
-      socket.broadcast.to(game).emit('playerTurn', players[0], 0);
-      io.in(game).emit('changeTurn', players[0]);
+    socket.broadcast.to(game).emit('playerTurn', players[0], 0);
+    io.in(game).emit('changeTurn', players[0]);
+  });
 
-      socket.on('turn-over', (col, player, lsatIndex) => {
-        let newIndex = lsatIndex + 1;
+  socket.on('turn-over', (game, col, player, lastIndex, readyPlayers) => {
+    const players = Object.values(readyPlayers);
 
-        if (players[newIndex] === undefined) {
-          newIndex = 0;
-        }
+    let newIndex = lastIndex + 1;
 
-        const newPlayer = players[newIndex];
+    if (players[newIndex] === undefined) {
+      newIndex = 0;
+    }
 
-        socket.broadcast.to(game).emit('playerTurn', newPlayer, newIndex, player, col);
-        io.in(game).emit('changeTurn', newPlayer); // update turn status
+    const newPlayer = players[newIndex];
 
-        socket.on('player-won', (winner) => {
-          io.in(game).emit('playerWon', winner);
-        });
+    socket.broadcast.to(game).emit('playerTurn', newPlayer, newIndex, player, col);
+    io.in(game).emit('changeTurn', newPlayer); // update turn status
+  });
 
-        socket.on('game-draw', () => {
-          io.in(game).emit('gameDraw');
-        });
-      });
-    });
+  socket.on('player-won', (game, winner) => {
+    io.in(game).emit('playerWon', winner);
+  });
 
-    socket.on('player-left', (player) => {
-      io.in(game).emit('playerDisconnected', player);
-    });
+  socket.on('game-draw', (game) => {
+    io.in(game).emit('gameDraw');
+  });
+
+  socket.on('player-left', (game, player) => {
+    socket.broadcast.to(game).emit('playerDisconnected', player);
   });
 }
 

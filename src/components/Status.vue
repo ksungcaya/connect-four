@@ -8,12 +8,14 @@
 <script>
 export default {
   props: ["currentPlayer"],
+
   data() {
     return {
       winnerStatus: "",
       turnStatus: ""
     };
   },
+
   sockets: {
     changeTurn(player) {
       let text = `Player ${player._color}'s turn.`;
@@ -24,6 +26,7 @@ export default {
 
       this.turnStatus = text;
     },
+
     playerWon(player) {
       let text = `Player ${player._color} won.`;
 
@@ -33,15 +36,17 @@ export default {
 
       this.endGame(text, player);
     },
+
     gameDraw() {
-      this.endGame('Game is a draw.');
+      this.endGame("Game is a draw.");
     }
   },
+
   methods: {
     endGame(text, player) {
-      this.turnStatus = '';
+      this.turnStatus = "";
       this.winnerStatus = text;
-      this.$emit('endGame', player);
+      this.$emit("endGame", player);
     }
   }
 };

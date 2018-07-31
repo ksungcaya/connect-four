@@ -37,7 +37,6 @@ export default {
       }
 
       this.$emit("playerClicked", this.playerData);
-      this.$forceUpdate();
     }
   }
 };

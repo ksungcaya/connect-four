@@ -96,9 +96,11 @@ export default {
 
       this.$socket.emit(
         "turn-over",
+        this.gameData.id,
         col,
         this.currentPlayer.setTurn(false),
-        this.currentPlayerIndex
+        this.currentPlayerIndex,
+        this.players
       );
     },
 
@@ -112,12 +114,12 @@ export default {
     checkWinner(player) {
       if (this.game.hasWonBy(player)) {
         console.log("Player ", player.color(), " won");
-        return this.$socket.emit("player-won", player);
+        return this.$socket.emit("player-won", this.gameData.id, player);
       }
 
       if (this.game.isDraw()) {
         console.log("Game is a draw.");
-        return this.$socket.emit("game-draw");
+        return this.$socket.emit("game-draw", this.gameData.id);
       }
     }
   },

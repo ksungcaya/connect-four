@@ -15,7 +15,11 @@ class Player {
   }
 
   choose() {
-    this._taken = true;
+    return this.setTaken(true);
+  }
+
+  setTaken(isTaken) {
+    this._taken = Boolean(isTaken);
 
     return this;
   }

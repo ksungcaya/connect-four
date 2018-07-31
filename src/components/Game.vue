@@ -10,11 +10,7 @@
     </div>
 
     <div class="game-side col-3 align-self-start">
-      <router-link 
-        :to="{ path: '/' }"
-        class="back-link">
-        &laquo; Games
-      </router-link>
+      <a href="/" @click.prevent="toGames" class="back-link">&laquo; Games</a>
 
       <div class="players">
         <h3>Players</h3>
@@ -24,12 +20,13 @@
           :player="player"
           :currentPlayer="currentPlayer"
           @playerClicked="assign"
-          @playerChosen="chosen"
+          @playerChosen="addPlayer"
         ></player>
 
         <ready 
           :playersCount="playersCount"
           :player="currentPlayer"
+          :gameName="this.getName()"
           @addReadyCount="readyCount++"
         ></ready>
       </div>
@@ -67,8 +64,9 @@ export default {
 
   watch: {
     readyCount(newCount) {
-      if (newCount === this.playersCount) {
-        this.$socket.emit("all-ready", this.players);
+
+      if (newCount > 0 && newCount === this.playersCount) {
+        this.$socket.emit("all-ready", this.getName(), this.players);
         this.lockGame();
       }
     }
@@ -81,34 +79,38 @@ export default {
 
   sockets: {
     playerDisconnected(player) {
-      this.playersCount--;
-
-      if (this.playersCount === 0) {
-        return;
-      }
-
       this.unlockGame().then(() => {
         alert(`Player ${player._color} left. Game will be refreshed.`);
+
+        this.leavingGame();
+        window.removeEventListener("beforeunload", this.leavingGame);
         window.location.reload();
       });
+    },
+
+    joinGame() {
+      alert(`A player joined the game.`);
+      this.resetGame();
     }
   },
 
   methods: {
+    toGames() {
+      this.leavingGame();
+      this.$router.push({ path: "/" });
+    },
+
     leavingGame() {
       if (this.playersCount >= 2 && this.currentPlayer) {
-        this.$socket.emit("player-left", this.currentPlayer);
+        this.$socket.emit("player-left", this.getName(), this.currentPlayer);
       }
+
+      this.$socket.emit("client-left", this.getName());
     },
 
     assign(player) {
       this.currentPlayer = this.addPlayer(player);
-      this.$socket.emit("player-assign", player);
-    },
-
-    chosen(player) {
-      this.addPlayer(player);
-      this.$forceUpdate();
+      this.$socket.emit("player-assign", this.getName(), player);
     },
 
     addPlayer(player) {
@@ -117,6 +119,21 @@ export default {
       this.playersCount++;
 
       return player;
+    },
+
+    resetGame() {
+      for (const id in this.players) {
+        if (this.players.hasOwnProperty(id)) {
+          const player = this.players[id];
+
+          this.unassignedPlayers[id] = player.setTaken(false);
+        }
+      }
+
+      this.players = {};
+      this.playersCount = 0;
+      this.readyCount = 0;
+      this.currentPlayer = null;
     },
 
     lockGame() {
@@ -167,6 +184,7 @@ export default {
           this.unassignedPlayers[id] = new GamePlayer(id, color, isTaken);
         }
 
+        console.log('joining game: ', this.getName());
         this.$socket.emit("join-game", this.getName());
       });
     },

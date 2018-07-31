@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  props: ["playersCount", "player"],
+  props: ["playersCount", "player", "gameName"],
 
   data() {
     return {
@@ -30,7 +30,7 @@ export default {
     ready() {
       this.isReady = true;
       this.$emit("addReadyCount");
-      this.$socket.emit("player-ready", this.player);
+      this.$socket.emit("player-ready", this.gameName, this.player);
     }
   }
 };
