@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Game from '../components/Game.vue';
 import GamesList from '../components/GamesList.vue';
 import NotFound from '../components/NotFound.vue';
+import GameLocked from '../components/GameLocked.vue';
 
 Vue.use(VueRouter);
 
@@ -20,7 +21,7 @@ export default new VueRouter({
     component: NotFound,
   }, {
     path: '/game-locked',
-    component: NotFound,
+    component: GameLocked,
   }, {
     path: '*',
     redirect: '/not-found',

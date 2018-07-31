@@ -15,6 +15,11 @@ a:hover {
   margin-bottom: 20px;
 }
 
+.not-found,
+.game-locked {
+  margin-top: 30px;
+}
+
 .board__row:hover,
 .player:hover {
   cursor: pointer;
