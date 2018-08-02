@@ -3,7 +3,6 @@
     <div class="col-8 align-self-end">
       <board
         :game="game"
-        :gameData="gameData"
         :players="players"
         :currentPlayer="currentPlayer"
       ></board>
@@ -26,7 +25,7 @@
         <ready 
           :playersCount="playersCount"
           :player="currentPlayer"
-          :gameName="this.getName()"
+          :gameId="this.gameId()"
           @addReadyCount="readyCount++"
         ></ready>
       </div>
@@ -64,9 +63,8 @@ export default {
 
   watch: {
     readyCount(newCount) {
-
       if (newCount > 0 && newCount === this.playersCount) {
-        this.$socket.emit("all-ready", this.getName(), this.players);
+        this.$socket.emit("all-ready", this.gameId(), this.players);
         this.lockGame();
       }
     }
@@ -102,15 +100,15 @@ export default {
 
     leavingGame() {
       if (this.playersCount >= 2 && this.currentPlayer) {
-        this.$socket.emit("player-left", this.getName(), this.currentPlayer);
+        this.$socket.emit("player-left", this.gameId(), this.currentPlayer);
       }
 
-      this.$socket.emit("client-left", this.getName());
+      this.$socket.emit("client-left", this.gameId());
     },
 
     assign(player) {
       this.currentPlayer = this.addPlayer(player);
-      this.$socket.emit("player-assign", this.getName(), player);
+      this.$socket.emit("player-assign", this.gameId(), player);
     },
 
     addPlayer(player) {
@@ -138,7 +136,7 @@ export default {
 
     lockGame() {
       this.$http
-        .post(`/api/games/lock`, { id: this.getName() })
+        .post(`/api/games/lock`, { id: this.gameId() })
         .catch(error => {
           console.log(error);
         })
@@ -149,7 +147,7 @@ export default {
 
     unlockGame() {
       return this.$http
-        .post(`/api/games/unlock`, { id: this.getName() })
+        .post(`/api/games/unlock`, { id: this.gameId() })
         .catch(error => {
           console.log(error);
         });
@@ -157,7 +155,7 @@ export default {
 
     endGame() {
       this.$http
-        .post(`/api/games/end`, { id: this.getName() })
+        .post(`/api/games/end`, { id: this.gameId() })
         .catch(error => {
           console.log(error);
         })
@@ -167,7 +165,7 @@ export default {
     },
 
     loadGame() {
-      this.$http.get(`/api/games/${this.getName()}`).then(({ data }) => {
+      this.$http.get(`/api/games/${this.gameId()}`).then(({ data }) => {
         if (!data || data.ended) {
           return this.$router.push("/not-found");
         }
@@ -176,20 +174,26 @@ export default {
           return this.$router.push("/game-locked");
         }
 
-        this.gameData = data;
-        this.game = new Game(new GameBoard(data.cols, data.rows));
-
-        for (let i = 0; i < data.players.length; i++) {
-          const { id, color, isTaken } = data.players[i];
-          this.unassignedPlayers[id] = new GamePlayer(id, color, isTaken);
-        }
-
-        console.log('joining game: ', this.getName());
-        this.$socket.emit("join-game", this.getName());
+        this.setUpGame(data);
       });
     },
 
-    getName() {
+    setUpGame(data) {
+      this.game = new Game(new GameBoard(data.cols, data.rows), data.id);
+
+      for (let i = 0; i < data.players.length; i++) {
+        const { id, color, isTaken } = data.players[i];
+        this.unassignedPlayers[id] = new GamePlayer(id, color, isTaken);
+      }
+
+      this.$socket.emit("join-game", this.gameId());
+    },
+
+    gameId() {
+      if (this.game) {
+        return this.game.id();
+      }
+
       return this.$route.params.game;
     }
   },

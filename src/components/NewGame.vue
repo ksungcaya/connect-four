@@ -38,8 +38,6 @@ export default {
         .then(({ data }) => {
           this.name = "";
           this.$emit("created", data);
-
-          console.log(data);
         });
     }
   }

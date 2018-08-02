@@ -1,5 +1,5 @@
 <template>
-  <div class="board" v-if="game && gameData">
+  <div class="board" v-if="game">
     <div
         v-for="state in states"
         class="board__row"
@@ -20,7 +20,7 @@
 
 <script>
 export default {
-  props: ["game", "currentPlayer", "players", "gameData"],
+  props: ["game", "currentPlayer", "players"],
 
   data() {
     return {
@@ -34,13 +34,13 @@ export default {
       get() {
         let states = [];
 
-        for (let i = this.gameData.rows; i !== 0; i--) {
+        for (let i = this.game.rowCount(); i !== 0; i--) {
           let state = {
             row: i,
             cells: []
           };
 
-          for (let j = 1; j <= this.gameData.cols; j++) {
+          for (let j = 1; j <= this.game.columnCount(); j++) {
             let cell = {
               col: j,
               fillClass: ""
@@ -96,7 +96,7 @@ export default {
 
       this.$socket.emit(
         "turn-over",
-        this.gameData.id,
+        this.game.id(),
         col,
         this.currentPlayer.setTurn(false),
         this.currentPlayerIndex,
@@ -114,12 +114,12 @@ export default {
     checkWinner(player) {
       if (this.game.hasWonBy(player)) {
         console.log("Player ", player.color(), " won");
-        return this.$socket.emit("player-won", this.gameData.id, player);
+        return this.$socket.emit("player-won", this.game.id(), player);
       }
 
       if (this.game.isDraw()) {
         console.log("Game is a draw.");
-        return this.$socket.emit("game-draw", this.gameData.id);
+        return this.$socket.emit("game-draw", this.game.id());
       }
     }
   },
