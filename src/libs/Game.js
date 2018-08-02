@@ -5,11 +5,40 @@ class Game {
    * Game constructor.
    *
    * @param {Board} board
+   * @param {String} id
    */
-  constructor(board) {
+  constructor(board, id) {
     this._board = board;
+    this._id = id;
     this.validate = new WinnerValidator(this._board);
     this.winner = null;
+  }
+
+  /**
+   * Get the game id.
+   *
+   * @returns {Integer}
+   */
+  id() {
+    return this._id;
+  }
+
+  /**
+   * Get the board rows count.
+   *
+   * @returns {Integer}
+   */
+  rowCount() {
+    return this._board.rows;
+  }
+
+  /**
+   * Get the board columns count.
+   *
+   * @returns {Integer}
+   */
+  columnCount() {
+    return this._board.columns;
   }
 
   /**
