@@ -25,7 +25,7 @@ export default {
   sockets: {
     playerAssigned(player) {
       if (player._id === this.playerData.getId()) {
-        this.$emit("playerChosen", this.playerData);
+        this.$emit("playerSelected", this.playerData);
       }
     }
   },

@@ -11,24 +11,18 @@
     <div class="game-side col-3 align-self-start">
       <a href="/" @click.prevent="toGames" class="back-link">&laquo; Games</a>
 
-      <div class="players">
-        <h3>Players</h3>
-        <player 
-          v-for="player in unassignedPlayers"
-          :key="`${player.getId()}`"
-          :player="player"
-          :currentPlayer="currentPlayer"
-          @playerClicked="assign"
-          @playerChosen="addPlayer"
-        ></player>
-
-        <ready 
-          :playersCount="playersCount"
-          :player="currentPlayer"
-          :gameId="this.gameId()"
-          @addReadyCount="readyCount++"
-        ></ready>
-      </div>
+      <players-list
+        :game="game"
+        :unassignedPlayers="unassignedPlayers"
+        :currentPlayer="currentPlayer"
+        :players="players"
+        :readyCount="readyCount"
+        :playersCount="playersCount"
+        @currentPlayerSelected="currentPlayerSelected"
+        @playerSelected="playerSelected"
+        @allPlayersReady="lockGame"
+        @addReadyCount="readyCount++"
+      ></players-list>
 
       <status
         :currentPlayer="currentPlayer"
@@ -40,9 +34,8 @@
 
 <script>
 import Board from "./Board.vue";
-import Player from "./Player.vue";
-import Ready from "./Ready.vue";
 import Status from "./Status.vue";
+import PlayersList from "./PlayersList.vue";
 
 import Game from "../libs/Game";
 import GameBoard from "../libs/Board";
@@ -52,22 +45,12 @@ export default {
   data() {
     return {
       game: null,
-      gameData: null,
-      readyCount: 0,
-      playersCount: 0,
-      players: {},
       unassignedPlayers: {},
+      playersCount: 0,
+      readyCount: 0,
+      players: {},
       currentPlayer: null
     };
-  },
-
-  watch: {
-    readyCount(newCount) {
-      if (newCount > 0 && newCount === this.playersCount) {
-        this.$socket.emit("all-ready", this.gameId(), this.players);
-        this.lockGame();
-      }
-    }
   },
 
   created() {
@@ -80,8 +63,10 @@ export default {
       this.unlockGame().then(() => {
         alert(`Player ${player._color} left. Game will be refreshed.`);
 
-        this.leavingGame();
+        // current client should not be notified before emitting player-left event.
         window.removeEventListener("beforeunload", this.leavingGame);
+
+        this.leavingGame();
         window.location.reload();
       });
     },
@@ -102,21 +87,16 @@ export default {
       if (this.playersCount >= 2 && this.currentPlayer) {
         this.$socket.emit("player-left", this.gameId(), this.currentPlayer);
       }
-
-      this.$socket.emit("client-left", this.gameId());
     },
 
-    assign(player) {
-      this.currentPlayer = this.addPlayer(player);
-      this.$socket.emit("player-assign", this.gameId(), player);
+    currentPlayerSelected(player) {
+      this.currentPlayer = player;
     },
 
-    addPlayer(player) {
-      this.unassignedPlayers[player.getId()] = player.choose();
+    playerSelected(player) {
+      this.unassignedPlayers[player.getId()] = player;
       this.players[player.getId()] = player;
       this.playersCount++;
-
-      return player;
     },
 
     resetGame() {
@@ -198,7 +178,7 @@ export default {
     }
   },
 
-  components: { Board, Player, Ready, Status }
+  components: { Board, PlayersList, Status }
 };
 </script>
 
