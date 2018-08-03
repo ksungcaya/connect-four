@@ -1,7 +1,12 @@
 <template>
   <div>
     <div class="input-group game-form">
-      <input type="text" class="form-control" name="name" v-model="name">
+      <input 
+        type="text"
+        class="form-control"
+        name="name"
+        v-model="name"
+        @keyup.enter="createGame">
       <div class="input-group-append">
         <button type="submit"
                 placeholder="Enter game name"
@@ -25,6 +30,10 @@ export default {
 
   methods: {
     createGame() {
+      if (this.name.length <= 2) {
+        return;
+      }
+
       this.$http
         .post("/api/games", {
           name: this.name,

@@ -58,4 +58,20 @@ export default {
   font-size: 2em;
   font-weight: bold;
 }
+
+/* Small Devices, Tablets */
+@media only screen and (max-width: 768px) {
+  .game__status {
+    display: inline-block;
+    vertical-align: middle;
+  }
+}
+
+/* Extra Small Devices, Phones */
+@media only screen and (max-width: 480px) {
+  .game__status__turn,
+  .game__status__winner {
+    font-size: 1em;
+  }
+}
 </style>

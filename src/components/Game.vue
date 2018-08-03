@@ -1,14 +1,6 @@
 <template>
   <div class="game row">
-    <div class="col-8 align-self-end">
-      <board
-        :game="game"
-        :players="players"
-        :currentPlayer="currentPlayer"
-      ></board>
-    </div>
-
-    <div class="game-side col-3 align-self-start">
+    <div class="game-side col-lg-3 col-sm-12">
       <a href="/" @click.prevent="toGames" class="back-link">&laquo; Games</a>
 
       <players-list
@@ -28,6 +20,14 @@
         :currentPlayer="currentPlayer"
         @endGame="endGame"
       ></status>
+    </div>
+
+    <div class="col-lg-9 col-sm-12">
+      <board
+        :game="game"
+        :players="players"
+        :currentPlayer="currentPlayer"
+      ></board>
     </div>
   </div>
 </template>
@@ -117,31 +117,21 @@ export default {
     lockGame() {
       this.$http
         .post(`/api/games/lock`, { id: this.gameId() })
-        .catch(error => {
-          console.log(error);
-        })
-        .then(({ data }) => {
-          console.log("game locked.");
-        });
+        .catch(error => console.log(error))
+        .then(({ data }) => console.log("game locked."));
     },
 
     unlockGame() {
       return this.$http
         .post(`/api/games/unlock`, { id: this.gameId() })
-        .catch(error => {
-          console.log(error);
-        });
+        .catch(error => console.log(error));
     },
 
     endGame() {
       this.$http
         .post(`/api/games/end`, { id: this.gameId() })
-        .catch(error => {
-          console.log(error);
-        })
-        .then(({ data }) => {
-          console.log("game ended.");
-        });
+        .catch(error => console.log(error))
+        .then(({ data }) => console.log("game ended."));
     },
 
     loadGame() {

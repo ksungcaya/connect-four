@@ -14,7 +14,7 @@
       :playersCount="playersCount"
       :player="currentPlayer"
       :gameId="game.id()"
-      @addReadyCount="onReady"
+      @addReadyCount="$emit('addReadyCount')"
     ></ready>
   </div>
 </template>
@@ -56,14 +56,19 @@ export default {
       this.$emit("playerSelected", player.choose());
 
       return player;
-    },
-
-    onReady() {
-      this.$emit("addReadyCount");
     }
   },
 
   components: { Player, Ready }
 };
 </script>
+
+<style>
+/* Small Devices, Tablets */
+@media only screen and (max-width: 768px) {
+  .players {
+    display: inline-block;
+  }
+}
+</style>
 

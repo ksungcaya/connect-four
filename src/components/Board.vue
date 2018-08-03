@@ -142,4 +142,20 @@ export default {
   height: 70px;
   margin: 5px;
 }
+
+/* Small Devices, Tablets */
+@media only screen and (max-width: 768px) {
+  .board__cell {
+    width: 60px !important;
+    height: 60px !important;
+  }
+}
+
+/* Extra Small Devices, Phones */
+@media only screen and (max-width: 480px) {
+  .board__cell {
+    width: 40px !important;
+    height: 40px !important;
+  }
+}
 </style>
