@@ -5,7 +5,7 @@ import express from 'express';
 import socketio from 'socket.io';
 import bodyParser from 'body-parser';
 import errorhandler from 'errorhandler';
-import socket from './socket';
+import listeners from './listeners';
 import routes from './routes';
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -63,6 +63,6 @@ app.use((err, req, res) => {
   });
 });
 
-io.on('connection', socket(io));
+io.on('connection', listeners(io));
 
 export default server;
